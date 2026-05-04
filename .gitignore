@@ -7,10 +7,11 @@ __pycache__/
 
 .ipynb_checkpoints/
 
-data/raw/*
-data/processed/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
+# Fichiers data volumineux à exclure (mais on garde les CSV)
+data/raw/*.zip
+data/raw/*.tar.gz
+data/processed/*.zip
+*.parquet
 
 models/*
 !models/.gitkeep
