@@ -1,48 +1,29 @@
-# Documentation du dataset
+# Dataset — Détection de faux profils sur réseaux sociaux
 
-## Source originale
+## Fichier
+- Nom : `fake_social_media_global_2_0_with_missing.xlsx`
+- Format : Excel
+- Lignes : 3000
+- Colonnes : 24
 
-- **Nom** : Instagram Fake and Real Accounts Dataset
-- **URL** : https://www.kaggle.com/datasets/rezaunderfit/instagram-fake-and-real-accounts-dataset
-- **Fichier original** : `final-v1.csv` (785 lignes, 13 colonnes)
-- **Cible** : `is_fake` — 1 = faux profil, 0 = vrai profil
+## Source
+Dataset partagé par mon camarade de promotion (sourcé sur Kaggle).
 
----
+## Variable cible
+`is_fake` : 0 = vrai profil (1941 cas, 64,7%), 1 = faux profil (1059 cas, 35,3%)
 
-## Justification de la dégradation
+## Caractéristique notable
+Le dataset est **déjà brut** d'origine (avec des valeurs manquantes injectées sur la plupart des colonnes), ce qui correspond exactement à la consigne de l'enseignante qui demandait un fichier non traité à nettoyer soi-même. Pas besoin de dégradation artificielle ici.
 
-Le dataset Kaggle original est trop propre (0 valeur manquante, types cohérents) pour satisfaire la consigne de l'enseignante qui exige un fichier CSV brut nécessitant un preprocessing visible et documenté.
+## Colonnes
+**Caractéristiques du compte** : platform, has_profile_pic, bio_length, verified, account_age_days
 
-Un script de dégradation volontaire (`src/degrade_dataset.py`) a été appliqué sur une copie du fichier original pour introduire des imperfections représentatives de problèmes réels. Cette démarche est transparente et documentée ici.
+**Activité** : followers, following, follower_following_ratio, posts, posts_per_day
 
-Le fichier original `final-v1.csv` n'est jamais modifié. Le script repart toujours de ce fichier source, garantissant la reproductibilité.
+**Comportements suspects** : caption_similarity_score, content_similarity_score, follow_unfollow_rate, spam_comments_rate, generic_comment_rate, suspicious_links_in_bio
 
----
+**Caractéristiques username** : username_randomness, username_length, digits_count, digit_ratio, special_char_count, repeat_char_count
 
-## Imperfections introduites
+**Variable cible** : is_fake
 
-| Type | Colonne | Quantité |
-|---|---|---|
-| Valeurs manquantes (NaN) | `username_length` | ~5% des lignes (~39 NaN) |
-| Valeurs manquantes (NaN) | `full_name_length` | ~5% des lignes (~39 NaN) |
-| Valeurs manquantes (NaN) | `edge_follow` | ~3% des lignes (~24 NaN) |
-| Doublons exacts | toutes colonnes | +12 lignes dupliquées |
-| Outliers extrêmes | `username_length` | 5 valeurs (999, 888, 777, 666, 555) |
-| Outliers extrêmes | `full_name_length` | 3 valeurs (500, 600, 700) |
-| Type incohérent (object) | `edge_followed_by` | ~2% remplacés par la chaîne "N/A" |
-
----
-
-## Reproductibilité
-
-- **Random seed** : `42` (utilisé via `numpy.random.default_rng(42)` et `DataFrame.sample(random_state=42)`)
-- Toute réexécution de `src/degrade_dataset.py` produit exactement le même fichier `instagram_brut.csv`
-
----
-
-## Fichiers
-
-| Fichier | Description |
-|---|---|
-| `final-v1.csv` | Dataset original Kaggle — ne pas modifier |
-| `instagram_brut.csv` | Version dégradée — point de départ du projet |
+**Variable à exclure de la modélisation** : username (identifiant non prédictif)
